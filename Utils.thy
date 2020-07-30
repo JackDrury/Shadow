@@ -86,6 +86,14 @@ lemma SKIP_then_p3:
   unfolding SKIP_def COMPOSE_def
   by simp
 
+lemma COMPOSE_left_eq: 
+  "p hs = p' hs \<Longrightarrow> (COMPOSE p q) hs = (COMPOSE p' q) hs"
+  unfolding COMPOSE_def by simp
+
+lemma COMPOSE_right_eq: 
+  "(\<forall> hs'\<in> p hs. q hs' =  q' hs') \<Longrightarrow> 
+   (COMPOSE p q) hs = (COMPOSE p q') hs"
+  unfolding COMPOSE_def by simp
 
 lemma equality_implies_reducedEquality:
   shows "A = B \<Longrightarrow> A =:= B"
@@ -338,46 +346,6 @@ _Collect (g, h) (g \<in> G \<and> h \<in> H \<and> f g h = k)*)
   apply blast
   apply simp
   by (metis (mono_tags, lifting) CollectI subset_eq)  
-
-
-lemma most_general_encryption_lemma:
-  assumes "\<forall>k\<in>K.\<forall>h\<in>H. \<exists>g\<in>G. (f g h) = k"
-  and     "K\<noteq>{}"
-  and     "hs\<subseteq>H" 
-  shows
-  "
-  (SKIP ;; p) hs
-  =
-  (
-   (NewVar t (
-              CHOOSE (\<lambda>(_,h). {(g,h)|g. g\<in>G}) ;; 
-              REVEAL {{(g,h)|g h. g\<in>G \<and> h\<in>H \<and> ((f g h) = k)}|k. k\<in>K}
-             )
-   ) ;; p
-  ) hs
-  "
-  unfolding SKIP_def NewVar_def REVEAL_def COMPOSE_def CHOOSE_def
-  using assms
-  apply (-)
-  apply simp
-  apply safe
-  apply simp
-  apply (rule_tac x="{z. (\<exists>a. (a, z)\<in>(\<Union> {{(g, b) |g. g \<in> G} |b. b \<in> hs})\<inter>({(g, h). g \<in> G \<and> h \<in> H \<and> f g h = x}))}" in exI)
-  apply simp
-  apply (rule conjI)
-  apply (rule_tac x="(\<Union> {{(g, b) |g. g \<in> G} |b. b \<in> hs})\<inter>({(g, h). g \<in> G \<and> h \<in> H \<and> f g h = x})" in exI)
-  apply simp
-  apply (rule_tac x="({(g, h). g \<in> G \<and> h \<in> H \<and> f g h = x})" in exI)
-  apply simp
-  apply (rule_tac x="x" in exI)
-  apply simp
-  sorry
-  
-  
-  
-  
-  
-  
 
 definition
     XOR :: "bool \<Rightarrow> bool \<Rightarrow> bool"
@@ -666,7 +634,6 @@ lemma bool_fn_opposite:
   " \<not> f True \<Longrightarrow> f False \<Longrightarrow> f b = (\<not>b)"
   by (metis (full_types))
 
-
 lemma reveal_equals_assign_then_reveal_help1:
 "REVEAL {{(t,h)|h. h\<in>H}|t. t\<in>K} {(f h, h)|h. h\<in>H}
 =
@@ -724,6 +691,69 @@ lemma reveal_equals_assign_then_reveal_help7:
   apply (rule_tac x="{(f h, h) |h. h \<in> H \<and> f h = k}" in exI)
   by auto
 
+
+lemma reveal_in_scope:
+  fixes t::"'a"
+  shows
+  "  (
+       (NewVar t p) ;; 
+       REVEAL E
+     ) H 
+   = 
+     (
+       NewVar t (
+                  p ;; 
+                  REVEAL {(UNIV::'a set)\<times>e|e. e\<in>E}
+                )
+     ) H"
+  unfolding NewVar_def REVEAL_def COMPOSE_def
+  apply safe
+  apply simp
+  apply (rule_tac x="s\<inter>(UNIV\<times>sa)" in exI)
+  apply simp
+  apply (rule conjI)
+  apply blast
+  apply blast
+  apply simp
+  apply (rule_tac x="{z. \<exists>a. (a, z) \<in> hs'}" in exI)
+  apply (rule conjI)
+  apply blast
+  apply (rule_tac x="e" in exI)
+  by auto
+
+
+(* 
+  we spoke about how revealing a local variable does not impact the semantics
+  so what if we try to prove this lemma again, but don't worry about leaving
+  the first element of the statespace alone in the inner-scope reveal?
+*)
+
+lemma choose_in_scope:
+  fixes t::"'a"
+  shows
+  "  (
+       (NewVar t p) ;; 
+       CHOOSE E
+     ) H 
+   = 
+     (
+       NewVar t (
+                  p ;; 
+                  CHOOSE (\<lambda>h. {(fst h, b)|b. b\<in>(E (snd h))})
+                )
+     ) H"
+  unfolding NewVar_def CHOOSE_def COMPOSE_def
+  apply safe
+  apply simp
+  apply (rule_tac x="\<Union> {{(a, ba) |ba. ba \<in> E b} |a b. (a, b) \<in> s}" in exI)
+  apply simp
+  apply (rule conjI)
+  apply blast
+  apply blast
+  apply simp
+  apply (rule_tac x="{z. \<exists>a. (a, z) \<in> hs'}" in exI)
+  apply (rule conjI)
+  by auto
 
 lemma reveal_equals_assign_then_reveal:
   shows

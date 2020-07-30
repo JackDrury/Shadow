@@ -4,15 +4,15 @@ begin
 
 
 section \<open>Cream Cake Cryptographers\<close>
-(*
+  (*
 value "REVEAL {{(a,b)|a b. a\<in>{True,False} \<and> b\<in>{True,False} \<and> (a = b) = k}|k. k\<in>{True,False}} ({True,False}{True,False})"
 *)
 
 lemma cream_cake_helper:
   assumes "A = {True,False}"
-      and "B = {True,False}"
+    and "B = {True,False}"
   shows
-  "REVEAL {{(a,b)|a b. a\<in>A \<and> b\<in>B \<and> (a = b) = k}|k. k\<in>K} (X \<times> Y)
+    "REVEAL {{(a,b)|a b. a\<in>A \<and> b\<in>B \<and> (a = b) = k}|k. k\<in>K} (X \<times> Y)
   =
   {{(a,b)|a b. a\<in>X \<and> b\<in>Y \<and> (a = b) = k}|k. k\<in>K}
   "
@@ -20,15 +20,15 @@ lemma cream_cake_helper:
   apply (-)
   unfolding REVEAL_def
   apply safe
-  apply (rule_tac x="k" in exI)
-  apply force
+   apply (rule_tac x="k" in exI)
+   apply force
   apply (rule_tac x="{(a, b) |a b. a \<in> {True, False} \<and> b \<in> {True, False} \<and> (a = b) = k}" in exI)
   by auto
 
- 
+
 lemma cream_cake_helper1:
   shows
-  "CHOOSE (\<lambda>(_, a, b). {(c, a, b) |c. c \<in> C}) ({t} \<times> X \<times> Y)
+    "CHOOSE (\<lambda>(_, a, b). {(c, a, b) |c. c \<in> C}) ({t} \<times> X \<times> Y)
   =
   {C \<times> X \<times> Y}
   "
@@ -38,10 +38,10 @@ lemma cream_cake_helper1:
 
 lemma cream_cake_helper2:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
+    and "B = {True,False}"
+    and "C = {True,False}"
   shows
-  "
+    "
   REVEAL {{(c, a, b) |c a b. a \<in> A \<and> b \<in> B \<and> c \<in> C \<and> (a = c) = k} |k. k \<in> K} (C \<times> X \<times> Y) 
   =
   {{(c, a, b) |c a b. a \<in> X \<and> b \<in> Y \<and> c \<in> C \<and> (a = c) = k} |k. k \<in> K}
@@ -50,18 +50,18 @@ lemma cream_cake_helper2:
   apply (-)
   unfolding REVEAL_def
   apply safe
-  apply (rule_tac x="k" in exI)
-  apply blast
+   apply (rule_tac x="k" in exI)
+   apply blast
   apply (rule_tac x="{(c, a, b) |c a b. a \<in> {True, False} \<and> b \<in> {True, False} \<and> c \<in> {True, False} \<and> (a = c) = k}" in exI)
   by auto
 
 
 lemma cream_cake_helper3:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
+    and "B = {True,False}"
+    and "C = {True,False}"
   shows
-"
+    "
 REVEAL  {{(c, a, b) |c a b. a \<in> A \<and> b \<in> B \<and> c \<in> C \<and> (b = c) = k} |k. k \<in> K} ` 
         {{(c, a, b) |c a b. a \<in> X \<and> b \<in> Y \<and> c \<in> C \<and> (a = c) = k} |k. k \<in> K} 
 =
@@ -78,34 +78,34 @@ REVEAL  {{(c, a, b) |c a b. a \<in> A \<and> b \<in> B \<and> c \<in> C \<and> (
 
 
 lemma cream_cake_helper7:
-"
+  "
 {{(c, a, b) |c a b. a \<and> b \<and> (a = c) = k} \<inter> s |s. \<exists>k. s = {(c, a, b) |c a b. (b = c) = k}} 
 = 
 {z. \<exists>k1. z = {(c, a, b) |c a b. a \<and> b \<and> (b = c) = k1 \<and> (a = c) = k}}
 "
   apply safe
+   apply (induct k)
+    apply (rule_tac x="k" in exI)
+    apply blast
+   apply (rule_tac x="k" in exI)
+   apply blast
   apply (induct k)
-  apply (rule_tac x="k" in exI)
-  apply blast
-  apply (rule_tac x="k" in exI)
-  apply blast
-  apply (induct k)
-  apply simp
-  apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
-  apply blast
+   apply simp
+   apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
+   apply blast
   apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
   by auto
 
 
 lemma cream_cake_helper6:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
-      and "K = {True,False}"
-      and "X\<subseteq>A"
-      and "Y\<subseteq>B"
+    and "B = {True,False}"
+    and "C = {True,False}"
+    and "K = {True,False}"
+    and "X\<subseteq>A"
+    and "Y\<subseteq>B"
   shows
-  "
+    "
   {
   REVEAL {{(c, a, b) |c a b. a \<in> A \<and> b \<in> B \<and> c \<in> C \<and> ((b = c) = k)} |k. k \<in> K} 
            {(c, a, b) |c a b. a \<in> X \<and> b \<in> Y \<and> c \<in> C \<and> ((a = c) = k)} |k. k \<in> K
@@ -122,7 +122,7 @@ lemma cream_cake_helper6:
   using assms apply simp
    apply (-)
    apply (induct X rule:induct_H)
-  apply blast
+      apply blast
      apply safe[1]
       apply (rule_tac x="ka" in exI)
       apply blast
@@ -130,32 +130,32 @@ lemma cream_cake_helper6:
      apply blast
     apply safe[1]
      apply (rule_tac x="ka" in exI)
-  apply blast
+     apply blast
     apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
-  apply blast
+    apply blast
    apply safe[1]
     apply (rule_tac x="ka" in exI)
-  apply blast
+    apply blast
    apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
-  apply blast
+   apply blast
   using assms apply simp
   apply (rule_tac x="k2" in exI)
   apply safe
    apply (rule_tac x="{(c, a, b) |c a b. (b = c) = k1}" in exI)
-  apply blast
+   apply blast
   apply (rule_tac x="k" in exI)
   by auto
 
 
 lemma cream_cake_helper8:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
-      and "K = {True,False}"
-      and "X\<subseteq>A"
-      and "Y\<subseteq>B"
+    and "B = {True,False}"
+    and "C = {True,False}"
+    and "K = {True,False}"
+    and "X\<subseteq>A"
+    and "Y\<subseteq>B"
   shows
-  "
+    "
   {
   {snd h |h. h \<in> s} |s. 
    s \<in> \<Union> {{{(c, a, b) |c a b. a \<in> X \<and> b \<in> Y \<and> c \<in> C \<and> (b = c) = k1 \<and> (a = c) = k2} |k1. k1 \<in> K} 
@@ -166,22 +166,22 @@ lemma cream_cake_helper8:
                                                                              |k2. k2 \<in> K}
   "
   apply safe
-  apply simp
-  apply blast
+   apply simp
+   apply blast
   using assms apply simp
   apply (rule_tac x="{(c, a, b) |c a b. a \<in> X \<and> b \<in> Y \<and> (b = c) = k1 \<and> (a = c) = k2}" in exI)
   by auto
-  
+
 
 lemma cream_cake:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
-      and "K = {True,False}"
-      and "X\<subseteq>A"
-      and "Y\<subseteq>B"
+    and "B = {True,False}"
+    and "C = {True,False}"
+    and "K = {True,False}"
+    and "X\<subseteq>A"
+    and "Y\<subseteq>B"
   shows
-  "
+    "
   REVEAL {{(a,b)|a b. a\<in>A \<and> b\<in>B \<and> (a = b) = k}|k. k\<in>K} (X \<times> Y)
   =
   (
@@ -209,12 +209,12 @@ lemma cream_cake:
   using assms apply(simp+)[6]
   apply safe
   using assms apply simp
-  apply (rule_tac x="{z. \<exists>k1. z = {y. \<exists>c a b. y = (a, b) \<and> a \<in> X \<and> b \<in> Y \<and> (b = c) = k1 \<and> (a = c) = (k2)}}" in exI)
-  apply safe
-  apply (rule_tac x="k2" in exI)
-  apply blast
-  apply (rule_tac x="(k2 = k)" in exI)
-  apply blast
+   apply (rule_tac x="{z. \<exists>k1. z = {y. \<exists>c a b. y = (a, b) \<and> a \<in> X \<and> b \<in> Y \<and> (b = c) = k1 \<and> (a = c) = (k2)}}" in exI)
+   apply safe
+    apply (rule_tac x="k2" in exI)
+    apply blast
+   apply (rule_tac x="(k2 = k)" in exI)
+   apply blast
   using assms apply simp
   apply (rule_tac x="(k2 = k1)" in exI)
   apply safe
@@ -223,13 +223,13 @@ lemma cream_cake:
 (*Proving cream cake by using previously proven algebraic properties*)
 lemma cream_cake2:
   assumes "A = {True,False}"
-      and "B = {True,False}"
-      and "C = {True,False}"
-      and "K = {True,False}"
-      and "X\<subseteq>A"
-      and "Y\<subseteq>B"
+    and "B = {True,False}"
+    and "C = {True,False}"
+    and "K = {True,False}"
+    and "X\<subseteq>A"
+    and "Y\<subseteq>B"
   shows
-  "
+    "
   REVEAL {{(a,b)|a b. a\<in>A \<and> b\<in>B \<and> (a = b) = k}|k. k\<in>K} (X \<times> Y)
   =
   (
@@ -241,9 +241,14 @@ lemma cream_cake2:
   )
    (X \<times> Y)
   "
-  apply (subst SKIP_then_p3) thm most_general_encryption_lemma
-  apply (subst most_general_encryption_lemma[where t="t" and G="A" and K="K"])
-
+  apply (subst SKIP_then_p3)
+  apply (subst COMPOSE_left_eq)
+  apply (subst more_general_encryption_lemma[where t="t" and G="C" and H="A \<times> B"
+        and K="K" and f= "\<lambda> c h .fst h = c", 
+        simplified conj_commute[where P= "_ \<in> C"], 
+        simplified]; simp add: assms)
+   apply (fastforce simp: assms)
+   
 (*  apply (subst most_general_encryption_lemma[where X="X" and Y="Y" and Z="Z"])*)
   sorry
 
@@ -261,7 +266,7 @@ section \<open>Proving Algebraic Steps for Cream Cake\<close>
 (* Already proven, but repeating here for convenience *)
 
 lemma skip_p:
-"p = SKIP ;; p"
+  "p = SKIP ;; p"
   using SKIP_then_p3 by auto
 
 (*
@@ -308,7 +313,7 @@ lemma reveal_xor_is_reveal_equals_3vars:
 
 lemma equiv_reveals:
   shows
-  "(
+    "(
     REVEAL {{(a,b,c)|a b c. (a = c) = k \<and> b\<in>{True,False}}|k. k\<in>{True,False}} ;;
     REVEAL {{(a,b,c)|a b c. (a = b) = k \<and> c\<in>{True,False}}|k. k\<in>{True,False}} 
    ) 
@@ -321,20 +326,20 @@ lemma equiv_reveals:
   unfolding REVEAL_def COMPOSE_def
   apply simp
   apply safe
+   apply simp
+   apply (rule_tac x="x\<inter>({(a, b, c) |a b c. (a = c) = k})" in exI)
+   apply (rule conjI)
+    apply blast
+   apply (rule_tac x=" {(a, b, c) |a b c. (c = b) = (k=ka)}" in exI)
+   apply blast
   apply simp
   apply (rule_tac x="x\<inter>({(a, b, c) |a b c. (a = c) = k})" in exI)
   apply (rule conjI)
-  apply blast
-  apply (rule_tac x=" {(a, b, c) |a b c. (c = b) = (k=ka)}" in exI)
-  apply blast
-  apply simp
-  apply (rule_tac x="x\<inter>({(a, b, c) |a b c. (a = c) = k})" in exI)
-  apply (rule conjI)
-  apply blast
+   apply blast
   apply (rule_tac x=" {z. \<exists>a b. (\<exists>c. z = (a, b, c)) \<and> (a = b) = (k=ka)}" in exI)
   by auto
 
-  
+
 
 
 end

@@ -378,68 +378,6 @@ definition lift_reveal :: "'h prog \<Rightarrow> ('t\<times>'h) prog"
   so instead we just prove the lemma:
 *)
 
-lemma reveal_in_scope:
-  fixes t::"'a"
-  shows
-  "  (
-       (NewVar t p) ;; 
-       REVEAL E
-     ) H 
-   = 
-     (
-       NewVar t (
-                  p ;; 
-                  REVEAL {(UNIV::'a set)\<times>e|e. e\<in>E}
-                )
-     ) H"
-  unfolding NewVar_def REVEAL_def COMPOSE_def
-  apply safe
-  apply simp
-  apply (rule_tac x="s\<inter>(UNIV\<times>sa)" in exI)
-  apply simp
-  apply (rule conjI)
-  apply blast
-  apply blast
-  apply simp
-  apply (rule_tac x="{z. \<exists>a. (a, z) \<in> hs'}" in exI)
-  apply (rule conjI)
-  apply blast
-  apply (rule_tac x="e" in exI)
-  by auto
-
-
-(* 
-  we spoke about how revealing a local variable does not impact the semantics
-  so what if we try to prove this lemma again, but don't worry about leaving
-  the first element of the statespace alone in the inner-scope reveal?
-*)
-
-lemma choose_in_scope:
-  fixes t::"'a"
-  shows
-  "  (
-       (NewVar t p) ;; 
-       CHOOSE E
-     ) H 
-   = 
-     (
-       NewVar t (
-                  p ;; 
-                  CHOOSE (\<lambda>h. {(fst h, b)|b. b\<in>(E (snd h))})
-                )
-     ) H"
-  unfolding NewVar_def CHOOSE_def COMPOSE_def
-  apply safe
-  apply simp
-  apply (rule_tac x="\<Union> {{(a, ba) |ba. ba \<in> E b} |a b. (a, b) \<in> s}" in exI)
-  apply simp
-  apply (rule conjI)
-  apply blast
-  apply blast
-  apply simp
-  apply (rule_tac x="{z. \<exists>a. (a, z) \<in> hs'}" in exI)
-  apply (rule conjI)
-  by auto
 
 
 end
