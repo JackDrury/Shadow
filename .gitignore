@@ -1,0 +1,11 @@
+
+.DS_Store
+
+# ignore aux log and out files from TEX
+
+*.aux
+*.log
+*.out
+
+#ignore emacs metadata
+*~
