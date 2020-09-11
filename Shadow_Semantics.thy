@@ -1,5 +1,5 @@
 theory Shadow_Semantics
-  imports Main "~~/src/HOL/Library/LaTeXsugar"
+  imports Main
 begin
 
 text 

@@ -1,5 +1,5 @@
 theory Cream_Cake_example
-  imports Main "~~/src/HOL/Library/LaTeXsugar" "Shadow_Semantics" "Utils"
+  imports Main "Shadow_Semantics" "Utils"
 begin
 
 
@@ -243,11 +243,17 @@ lemma cream_cake2:
   "
   apply (subst SKIP_then_p3)
   apply (subst COMPOSE_left_eq)
-  apply (subst more_general_encryption_lemma[where t="t" and G="C" and H="A \<times> B"
-        and K="K" and f= "\<lambda> c h .fst h = c", 
+   apply (rule refl)
+  apply (subst more_general_encryption_lemma
+                [where t="t" and G="C" and H="A \<times> B"
+                       and K="K" and f= "\<lambda> c h .fst h = c", 
         simplified conj_commute[where P= "_ \<in> C"], 
         simplified]; simp add: assms)
    apply (fastforce simp: assms)
+  apply(subst reveal_in_scope)
+
+  thm choose_in_scope
+ 
    
 (*  apply (subst most_general_encryption_lemma[where X="X" and Y="Y" and Z="Z"])*)
   sorry

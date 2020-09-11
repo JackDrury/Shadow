@@ -87,12 +87,18 @@ lemma SKIP_then_p3:
   by simp
 
 lemma COMPOSE_left_eq: 
-  "p hs = p' hs \<Longrightarrow> (COMPOSE p q) hs = (COMPOSE p' q) hs"
+  "p hs = p' hs \<Longrightarrow> COMPOSE p q hs = COMPOSE p' q hs"
   unfolding COMPOSE_def by simp
 
 lemma COMPOSE_right_eq: 
-  "(\<forall> hs'\<in> p hs. q hs' =  q' hs') \<Longrightarrow> 
+  "(\<forall> hs'\<in> p hs. q hs' = q' hs') \<Longrightarrow> 
    (COMPOSE p q) hs = (COMPOSE p q') hs"
+  unfolding COMPOSE_def by simp
+
+lemma COMPOSE_left_right_eq: 
+  "p hs = p' hs\<Longrightarrow>
+  (\<forall> hs'\<in> p hs. q hs' = q' hs') \<Longrightarrow> 
+   (COMPOSE p q) hs = (COMPOSE p' q') hs"
   unfolding COMPOSE_def by simp
 
 lemma equality_implies_reducedEquality:
